@@ -9,6 +9,8 @@ uklanjanje. Korisnik kada pogleda sve zadatke, može prihvatiti da radi zahtev i
 postati dodeljen njemu. Kada korisnik koji je odabrao zahtev za rešavanje, reši dati zahtev,
 može ga markirati kao rešenog, čime će se promeniti njegov status. Labele, zahteve čuvati u
 bazi podataka ili tekstualnoj datoteci.
+
+
 Funkcionalni zahtevi:
 
 ● Kreiranje labele zahteva naziv labele i odabir boje labele. Labele ne smeju imati isti
@@ -53,6 +55,7 @@ odradi. Razrešavanje zadatka se vrši odabirom zahteva iz liste prihvaćenih (l
 zahteva korisnika i odabirom opcije razreši. Time se ovaj zahtev uklanja iz liste
 prihvaćenih (ličnih) zahteva. Razrešeni zadaci menjaju svoj status u prikazu svih zahteva
 na razrešen.
+
 
 Dodatni funkcionalni zahtevi:
 
