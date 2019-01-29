@@ -1,6 +1,6 @@
 # Vođenje zahteva u razvoju softvera
 
-Kratak opis:
+# Kratak opis:
 
 Omogućiti vođenje zahteva prilikom izrade softvera. Potrebno je voditi zahteve koji mogu imati
 različite labele (npr. novo, ažuriranje, greška). Labele uvodi korisnik. Zahteve takođe unosi
@@ -11,7 +11,7 @@ može ga markirati kao rešenog, čime će se promeniti njegov status. Labele, z
 bazi podataka ili tekstualnoj datoteci.
 
 
-Funkcionalni zahtevi:
+# Funkcionalni zahtevi:
 
 ● Kreiranje labele zahteva naziv labele i odabir boje labele. Labele ne smeju imati isti
 naziv.
@@ -57,7 +57,7 @@ prihvaćenih (ličnih) zahteva. Razrešeni zadaci menjaju svoj status u prikazu 
 na razrešen.
 
 
-Dodatni funkcionalni zahtevi:
+# Dodatni funkcionalni zahtevi:
 
 ● Omogućiti prijavu korisnika, čime svaki korisnik vidi sve zahteve koje niko još uvek nije
 prihvatio da radi, ali i sve zahteve koje je sam prihvatio.
