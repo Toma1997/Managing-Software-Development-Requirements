@@ -1,0 +1,9 @@
+{
+    "symbolic_name": "vodjenje.zahteva.razvoja.softvera",
+    "name": "Vodjenje zahteva o razvoju softvera",
+    "size": 30.5,
+    "category": "Razvoj Softvera",
+    "version": "1.0.0",
+    "enabled": true,
+    "description": "Omoguciti korisniku vodjenje zahteva prilikom izrade softvera, njihovo dodavanje, izmenu i uklanjanje."
+}
