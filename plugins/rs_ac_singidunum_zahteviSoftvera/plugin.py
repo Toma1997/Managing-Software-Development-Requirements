@@ -1,4 +1,5 @@
 from plugin_framework.plugin import Plugin
+from .widgets.tasks_widget import TasksWidget
 
 class Main(Plugin):
     """
@@ -22,4 +23,4 @@ class Main(Plugin):
         :param parent: bi trebao da bude widget u koji će se smestiti ovaj koji naš plugin omogućava.
         :returns: QWidget, QToolbar, QMenu
         """
-        return None, None, None
+        return TasksWidget(parent), None, None

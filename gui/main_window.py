@@ -1,5 +1,4 @@
-from PySide2 import QtWidgets
-from PySide2.QtGui import QIcon
+from PySide2 import QtWidgets, QtGui
 from gui.dialogs.plugin_dialog import PluginDialog
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -22,13 +21,13 @@ class MainWindow(QtWidgets.QMainWindow):
         # menjanje velicine prozora
         self.resize(800, 600) 
         # postavljanje ikonice prozora
-        self.setWindowIcon(QIcon("resources/icons/abacus.png")) 
+        self.setWindowIcon(QtGui.QIcon("resources/icons/abacus.png")) 
         # cuvanje atributa za plugin servis
         self.plugin_service = ps
         # atribut za cuvanje svih akcija u sistemu, ideja je da ove akcije mogu da se dele sa drugim widget-ima
         self.action_dict = {
-            "open":  QtWidgets.QAction(QIcon("resources/icons/folder-open-document.png"), "&Open document"),
-            "plugin_settings": QtWidgets.QAction(QIcon("resources/icons/puzzle.png"), "&Plugin settings")
+            "open":  QtWidgets.QAction(QtGui.QIcon("resources/icons/folder-open-document.png"), "&Open document"),
+            "plugin_settings": QtWidgets.QAction(QtGui.QIcon("resources/icons/puzzle.png"), "&Plugin settings")
         }
         # atribut za meni
         self.menu_bar = QtWidgets.QMenuBar(self)

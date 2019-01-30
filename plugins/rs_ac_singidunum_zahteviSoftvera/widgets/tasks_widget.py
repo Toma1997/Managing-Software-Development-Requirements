@@ -1,10 +1,10 @@
 from PySide2 import QtWidgets
 from PySide2 import QtGui
-from ..contacts_model import ContactsModel
-from .dialogs.add_contact_dialog import AddContactDialog
+from ..tasks_model import TasksModel
+from .dialogs.add_task_dialog import AddTaskDialog
 
 
-class ContactsWidget(QtWidgets.QWidget):
+class TasksWidget(QtWidgets.QWidget):
     """
     Klasa koja predstavlja glavni widget plugina za kontakte.
     """
@@ -19,13 +19,13 @@ class ContactsWidget(QtWidgets.QWidget):
         self.vbox_layout = QtWidgets.QVBoxLayout()
         self.hbox_layout = QtWidgets.QHBoxLayout()
 
-        self.open_contacts = QtWidgets.QPushButton(QtGui.QIcon("resources/icons/folder-open-document.png"), "Otvori", self)
-        self.save_contacts = QtWidgets.QPushButton(QtGui.QIcon("resources/icons/disk.png"), "Snimi", self)
+        self.open_tasks = QtWidgets.QPushButton(QtGui.QIcon("resources/icons/folder-open-document.png"), "Otvori", self)
+        self.save_tasks = QtWidgets.QPushButton(QtGui.QIcon("resources/icons/disk.png"), "Snimi", self)
         self.add_button = QtWidgets.QPushButton(QtGui.QIcon("resources/icons/plus.png"), "Dodaj", self)
         self.remove_button = QtWidgets.QPushButton(QtGui.QIcon("resources/icons/minus.png"), "Obrisi", self)
         
-        self.hbox_layout.addWidget(self.open_contacts)
-        self.hbox_layout.addWidget(self.save_contacts)
+        self.hbox_layout.addWidget(self.open_tasks)
+        self.hbox_layout.addWidget(self.save_tasks)
         self.hbox_layout.addWidget(self.add_button)
         self.hbox_layout.addWidget(self.remove_button)
         self.table_view = QtWidgets.QTableView(self)
@@ -34,8 +34,8 @@ class ContactsWidget(QtWidgets.QWidget):
         #self.table_view.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
 
 
-        self.open_contacts.clicked.connect(self._on_open)
-        self.save_contacts.clicked.connect(self._on_save)
+        self.open_tasks.clicked.connect(self._on_open)
+        self.save_tasks.clicked.connect(self._on_save)
         self.add_button.clicked.connect(self._on_add)
         self.remove_button.clicked.connect(self._on_remove)
 
@@ -54,7 +54,7 @@ class ContactsWidget(QtWidgets.QWidget):
         Postavlja novi model na tabelarni prikaz.
 
         :param model: model koji se prikazuje u tabeli.
-        :type model: ContactsModel
+        :type model: tasksModel
         """
         self.table_view.setModel(model)
 
@@ -62,14 +62,14 @@ class ContactsWidget(QtWidgets.QWidget):
         """
         Metoda koja se poziva na klik dugmeta open.
         """
-        path = QtWidgets.QFileDialog.getOpenFileName(self, "Open contacts file", ".", "CSV Files (*.csv)")
-        self.set_model(ContactsModel(path[0]))
+        path = QtWidgets.QFileDialog.getOpenFileName(self, "Open tasks file", ".", "CSV Files (*.csv)")
+        self.set_model(TasksModel(path[0]))
 
     def _on_save(self):
         """
         Metoda koja se poziva na klik dugmeta save.
         """
-        path = QtWidgets.QFileDialog.getSaveFileName(self, "Save contacts file", ".", "CSV Files (*.csv)")
+        path = QtWidgets.QFileDialog.getSaveFileName(self, "Save tasks file", ".", "CSV Files (*.csv)")
         self.table_view.model().save_data(path[0])
 
     def _on_add(self):
@@ -77,7 +77,7 @@ class ContactsWidget(QtWidgets.QWidget):
         Metoda koja se poziva na klik dugmeta add.
         Otvara dijalog sa formom za kreiranje novog korisnika u imeniku.
         """
-        dialog = AddContactDialog(self.parent())
+        dialog = AddTaskDialog(self.parent())
         # znaci da je neko odabrao potvrdni odgovor na dijalog
         if dialog.exec_() == QtWidgets.QDialog.Accepted:
             self.table_view.model().add(dialog.get_data())

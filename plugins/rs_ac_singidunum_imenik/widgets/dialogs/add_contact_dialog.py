@@ -15,13 +15,16 @@ class AddContactDialog(QtWidgets.QDialog):
         self.setWindowTitle("Dodaj kontakt")
         self.vbox_layout = QtWidgets.QVBoxLayout()
         self.form_layout = QtWidgets.QFormLayout()
+
         self.name_input = QtWidgets.QLineEdit(self)
         self.surname_input = QtWidgets.QLineEdit(self)
         self.phone_input = QtWidgets.QLineEdit(self)
         self.email_input = QtWidgets.QLineEdit(self)
         self.birthday_input = QtWidgets.QDateEdit(self)
+
         self.button_box = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.Ok 
             | QtWidgets.QDialogButtonBox.Cancel, parent=self)
+            
         self.email_re = QtCore.QRegExp(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", QtCore.Qt.CaseInsensitive)
         self.email_validator = QtGui.QRegExpValidator(self.email_re)
         self.email_input.setValidator(self.email_validator)

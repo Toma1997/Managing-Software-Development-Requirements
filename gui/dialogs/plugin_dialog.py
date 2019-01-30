@@ -1,6 +1,4 @@
-from PySide2 import QtWidgets
-from PySide2.QtGui import QIcon
-from PySide2.QtCore import Qt
+from PySide2 import QtWidgets, QtGui, QtCore
 
 class PluginDialog(QtWidgets.QDialog):
     """
@@ -26,10 +24,10 @@ class PluginDialog(QtWidgets.QDialog):
 
         self.plugin_options_layout = QtWidgets.QHBoxLayout()
 
-        self.set_button = QtWidgets.QPushButton(QIcon("resources/icons/application-plus.png"), "Set as central")
-        self.uninstall_button = QtWidgets.QPushButton(QIcon("resources/icons/minus-circle.png"), "Uninstall")
-        self.enable_button = QtWidgets.QPushButton(QIcon("resources/icons/tick.png"), "Enable")
-        self.disable_button = QtWidgets.QPushButton(QIcon("resources/icons/minus.png"), "Disable")
+        self.set_button = QtWidgets.QPushButton(QtGui.QIcon("resources/icons/application-plus.png"), "Set as central")
+        self.uninstall_button = QtWidgets.QPushButton(QtGui.QIcon("resources/icons/minus-circle.png"), "Uninstall")
+        self.enable_button = QtWidgets.QPushButton(QtGui.QIcon("resources/icons/tick.png"), "Enable")
+        self.disable_button = QtWidgets.QPushButton(QtGui.QIcon("resources/icons/minus.png"), "Disable")
         self.plugin_dialog_layout = QtWidgets.QVBoxLayout()
 
         self.plugins_table = QtWidgets.QTableWidget(self)
@@ -94,10 +92,10 @@ class PluginDialog(QtWidgets.QDialog):
             symbolic_name = QtWidgets.QTableWidgetItem(plugin.symbolic_name)
             enabled = QtWidgets.QTableWidgetItem("Enabled" if plugin.enabled else "Disabled")
 
-            name.setFlags(name.flags() ^ Qt.ItemIsEditable)
-            version.setFlags(version.flags() ^ Qt.ItemIsEditable)
-            description.setFlags(description.flags() ^ Qt.ItemIsEditable)
-            symbolic_name.setFlags(symbolic_name.flags() ^ Qt.ItemIsEditable)
+            name.setFlags(name.flags() ^ QtCore.Qt.ItemIsEditable)
+            version.setFlags(version.flags() ^ QtCore.Qt.ItemIsEditable)
+            description.setFlags(description.flags() ^ QtCore.Qt.ItemIsEditable)
+            symbolic_name.setFlags(symbolic_name.flags() ^ QtCore.Qt.ItemIsEditable)
 
             self.plugins_table.setItem(i, 0, name)
             self.plugins_table.setItem(i, 1, version)
