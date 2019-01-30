@@ -1,0 +1,9 @@
+{
+    "symbolic_name": "rs.ac.singidunum.zahteviSoftvera",
+    "name": "Zahtevi Softvera",
+    "size": 30.5,
+    "category": "Zahtevi",
+    "version": "1.1.0",
+    "enabled": true,
+    "description": "Omoguciti korisniku vodjenje zahteva prilikom izrade softvera."
+}

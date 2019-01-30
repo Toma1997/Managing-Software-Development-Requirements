@@ -79,10 +79,10 @@ class PluginService:
         """
         for d in os.listdir(plugins_path):
             dir_path = os.path.join(plugins_path, d)
-            if os.path.exists(os.path.join(dir_path, "__init__.py")):
+            if os.path.exists(os.path.join(dir_path, "__init__.py")): # ako postoji init fajl
                 with open(os.path.join(dir_path, "spec.json"), "r") as fp:
-                    spec = json.load(fp)
+                    spec = json.load(fp) # ucitaj specifikacije
                     print(os.path.join(dir_path, "plugin"))
                     modul = importlib.import_module(os.path.join(dir_path, "plugin").replace(os.sep, "."))
                     obj = modul.Main(spec)
-                    self.install(obj)
+                    self.install(obj) # instaliraj plugin

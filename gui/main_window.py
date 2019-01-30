@@ -107,6 +107,6 @@ class MainWindow(QtWidgets.QMainWindow):
         if widgets[1] is not None:
             self.tool_bar.addSeparator()
             self.tool_bar.addActions(widgets[1].actions())
-        self.menu_bar.addMenu(widget[2]) if widgets[2] is not None else None
+        self.menu_bar.addMenu(widgets[2]) if widgets[2] is not None else None
         # except IndexError:
         #     print("Ne postoji ni jedan plugin sa zadatim simboličkim imenom!")
