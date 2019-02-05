@@ -19,7 +19,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # podesavanje naslova prozora
         self.setWindowTitle("Univerzitet Singidunum") 
         # menjanje velicine prozora
-        self.resize(800, 600) 
+        self.resize(1400, 700) 
         # postavljanje ikonice prozora
         self.setWindowIcon(QtGui.QIcon("resources/icons/abacus.png")) 
         # cuvanje atributa za plugin servis

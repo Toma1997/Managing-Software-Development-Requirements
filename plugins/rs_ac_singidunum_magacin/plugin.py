@@ -1,16 +1,16 @@
 from plugin_framework.plugin import Plugin
-from .widgets.tasks_tool import TasksTool
-from .label.label_service import LabelService
-from .task.task_service import TaskService
+from .widgets.warehouse import Warehouse
+from .item.item_service import ItemService
+from .hall.hall_service import HallService
 
 class Main(Plugin):
     """
     Klasa koja predstavlja konkretni plugin. Nasledjujemo "apstraktnu" klasu Plugin.
-    Ova klasa predstavlja plugin za aplikaciju zahteva o razvoju softvera.
+    Ova klasa predstavlja plugin za aplikaciju kontakti (imenik).
     """
     def __init__(self, spec):
         """
-        Inicijalizator Razvoj Softvera plugina.
+        Inicijalizator imenik plugina.
 
         :param spec: specifikacija metapodataka o pluginu.
         :type spec: dict
@@ -25,9 +25,6 @@ class Main(Plugin):
         :param parent: bi trebao da bude widget u koji će se smestiti ovaj koji naš plugin omogućava.
         :returns: QWidget, QToolbar, QMenu
         """
-        task_service = TaskService()
-        task_service.load_tasks()
-        label_service = LabelService()
-        label_service.load_labels()
-        
-        return TasksTool(task_service, label_service, parent), None, None
+        hall_service = HallService()
+        hall_service.load_halls() 
+        return Warehouse(hall_service,parent), None, None
