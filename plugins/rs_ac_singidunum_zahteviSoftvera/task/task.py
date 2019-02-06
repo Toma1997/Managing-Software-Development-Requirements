@@ -109,6 +109,9 @@ class Task:
         """
         conn = sqlite3.connect('plugins\\rs_ac_singidunum_zahteviSoftvera\\baza\\zahteviSoftvera.db')
         c = conn.cursor()
+        if self.label_id == None: # ako je za dati zadatak obrisana labela
+            return []
+
         for name, color in c.execute('SELECT name, color FROM labels WHERE label_id = ?', (self.label_id,)):
             self._labelNameColor = [name, color]
         conn.close()

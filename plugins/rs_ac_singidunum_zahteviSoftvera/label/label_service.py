@@ -42,7 +42,7 @@ class LabelService:
                 return True
         return False
 
-    def edit(self, label, author_id, color):
+    def edit(self, label, author_id):
         """
         Menja boju labele.
 
@@ -55,7 +55,7 @@ class LabelService:
         """
         for lab in self._labels:
             if label.name == lab.name and author_id == lab.author_id:
-                lab.color = color
+                lab.color = label.color
                 return True
         return False
 
@@ -101,11 +101,19 @@ class LabelService:
         """
         conn = sqlite3.connect('plugins\\rs_ac_singidunum_zahteviSoftvera\\baza\\zahteviSoftvera.db')
         c = conn.cursor()
+
+        # posto sqlite baza nece da obrise strani kljuc cak i kad je ON DELETE = SET NULL
+        label_id = 0
+        for lid, in c.execute('SELECT label_id FROM labels WHERE name = ? AND author_id = ?', (label.name, user_id)):
+            label_id = int(lid)
+
         c.execute('DELETE FROM labels WHERE name = ? and author_id = ?', (label.name, user_id)) 
+        conn.commit()
+        c.execute('UPDATE tasks SET label_id = NULL WHERE label_id = ?', (label_id,))  
         conn.commit()
         conn.close()
 
-    def edit_label(self, label, color, user_id):
+    def edit_label(self, label, user_id):
         """
         Menja boju labela u sqlite bazi.  
         :param label: instanca label koju menjamo.
@@ -117,7 +125,7 @@ class LabelService:
         """
         conn = sqlite3.connect('plugins\\rs_ac_singidunum_zahteviSoftvera\\baza\\zahteviSoftvera.db')
         c = conn.cursor()
-        c.execute('UPDATE labels SET color = ? WHERE name = ? and author_id = ?', (color, label.name, user_id)) 
+        c.execute('UPDATE labels SET color = ? WHERE name = ? and author_id = ?', (label.color, label.name, user_id)) 
         conn.commit()
         conn.close()
 

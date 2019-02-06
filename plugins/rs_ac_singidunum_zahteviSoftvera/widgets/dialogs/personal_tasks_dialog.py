@@ -1,4 +1,5 @@
 from PySide2 import QtWidgets, QtGui, QtCore
+from .task_details_dialog import TaskDetailsDialog
 from ...task.task_service import TaskService
 from ...task.task import Task
 import sqlite3
@@ -66,7 +67,6 @@ class PersonalTasksDialog(QtWidgets.QDialog):
         
         self.finish_task = QtWidgets.QPushButton(QtGui.QIcon("resources/icons/tick.png"), "Razresi zadatak", self)
         self.task_details = QtWidgets.QPushButton(QtGui.QIcon("resources/icons/application-detail.png"), "Detaljan pregled zadatka", self)
-        self.plugin_dialog_layout = QtWidgets.QVBoxLayout()
 
         self.personal_tasks_options_layout.addWidget(self.finish_task)
         self.personal_tasks_options_layout.addWidget(self.task_details)
@@ -103,8 +103,14 @@ class PersonalTasksDialog(QtWidgets.QDialog):
                 desc = task.description
 
             description = QtWidgets.QTableWidgetItem(desc)
-            labelName = QtWidgets.QTableWidgetItem(task.labelNameColor[0])
-            labelColor =  QtWidgets.QTableWidgetItem(task.labelNameColor[1])
+
+            #ako se obrise labela
+            labelName = QtWidgets.QTableWidgetItem("")
+            labelColor = QtWidgets.QTableWidgetItem("")
+            if len(task.labelNameColor) == 2:
+                labelName = QtWidgets.QTableWidgetItem(task.labelNameColor[0])
+                labelColor =  QtWidgets.QTableWidgetItem(task.labelNameColor[1])
+
             authorFullName = QtWidgets.QTableWidgetItem(task.authorFullName)
             createdAt = QtWidgets.QTableWidgetItem(task.createdAt)
             acceptedAt = QtWidgets.QTableWidgetItem(task.acceptedAt)
@@ -145,14 +151,17 @@ class PersonalTasksDialog(QtWidgets.QDialog):
             QtWidgets.QMessageBox.information(self, "Obaveštenje", "Zadatak uspesno razresen", QtWidgets.QMessageBox.Ok)
         self.tasks_table.setSortingEnabled(True)
 
-     # treba doraditi metodu !
     def _on_task_details(self):
         """
-        Metoda koja otvara novi prozor sa svim detaljima jednog zadatka.
+        Metoda koja otvara novi prozor sa svim detaljima odabranog zadatka.
         """
-        dialog = PersonalTasksDialog(self.user_id)
+        self.tasks_table.setSortingEnabled(False)
+        selected_task = self.tasks_table.selectedItems()
+        if len(selected_task) == 0:
+            return QtWidgets.QMessageBox.warning(self, "Obaveštenje", "Odaberite zadatak", QtWidgets.QMessageBox.Ok)
+        task = self.get_task(selected_task)
+        dialog = TaskDetailsDialog(task, self.task_service)
         dialog.exec_()
-        self._populate_table()
         
     def get_task(self, task):
         """
@@ -166,8 +175,11 @@ class PersonalTasksDialog(QtWidgets.QDialog):
         c = conn.cursor()
 
         label_id = 0
-        for lid, in c.execute('SELECT label_id FROM labels WHERE name = ? and color = ?', (task[3].text(), task[4].text())):
-            label_id = int(lid)
+        if task[3].text() == "" and task[4].text() == "":
+            label_id = None
+        else:
+            for lid, in c.execute('SELECT label_id FROM labels WHERE name = ? and color = ?', (task[3].text(), task[4].text())):
+                label_id = int(lid)
         
         author_id = 0
         imePrezime = task[5].text().split(" ")

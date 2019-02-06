@@ -101,6 +101,12 @@ class TaskService:
     @property
     def personal_tasks(self):
         return self._personal_tasks
+
+    def clearList(self):
+        """
+        Pomocna metoda za praznjenje liste zbog brisanja labele
+        """
+        self._tasks = list()
              
     def load_tasks(self):
         """
@@ -158,4 +164,18 @@ class TaskService:
         c.execute('UPDATE tasks SET status = ? WHERE name = ? AND description = ? AND created_at = ?', (status, task.name, task.description, task.createdAt)) 
         conn.commit()
         conn.close()
-    
+
+    # DORADITI METODU
+    def task_details(self, task):
+        """
+        Očitava detaljno sve podatke iz svih tabela sqlite baze. 
+        Pravi listu sa detaljima i svim podacima za jedan zadatak.
+        """
+        conn = sqlite3.connect('plugins\\rs_ac_singidunum_zahteviSoftvera\\baza\\zahteviSoftvera.db')
+        c = conn.cursor()
+
+        for task_id, name, description, label_id, author_id, createdAt, acceptedAt, userAccepted_id, status in c.execute("SELECT * FROM tasks WHERE task_id = 1"):
+            listaDetalja = [str(task_id), name, description, str(label_id), str(author_id), createdAt, acceptedAt, str(userAccepted_id), status]
+        conn.close()
+
+        return listaDetalja

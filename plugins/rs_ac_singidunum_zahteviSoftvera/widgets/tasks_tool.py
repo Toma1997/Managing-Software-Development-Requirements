@@ -1,8 +1,10 @@
 from PySide2 import QtWidgets, QtGui, QtCore
 from .dialogs.add_task_dialog import AddTaskDialog
 from .dialogs.add_label_dialog import AddLabelDialog
+from .dialogs.edit_label_dialog import EditLabelDialog
 from .dialogs.delete_label_dialog import DeleteLabelDialog
 from .dialogs.personal_tasks_dialog import PersonalTasksDialog
+from .dialogs.task_details_dialog import TaskDetailsDialog
 from ..task.task import Task
 import datetime
 import sqlite3
@@ -127,8 +129,14 @@ class TasksTool(QtWidgets.QMainWindow):
                 desc = task.description
 
             description = QtWidgets.QTableWidgetItem(desc)
-            labelName = QtWidgets.QTableWidgetItem(task.labelNameColor[0])
-            labelColor =  QtWidgets.QTableWidgetItem(task.labelNameColor[1])
+
+            #ako se obrise labela
+            labelName = QtWidgets.QTableWidgetItem("")
+            labelColor = QtWidgets.QTableWidgetItem("")
+            if len(task.labelNameColor) == 2:
+                labelName = QtWidgets.QTableWidgetItem(task.labelNameColor[0])
+                labelColor =  QtWidgets.QTableWidgetItem(task.labelNameColor[1])
+
             authorFullName = QtWidgets.QTableWidgetItem(task.authorFullName)
             createdAt = QtWidgets.QTableWidgetItem(task.createdAt)
             acceptedAt = QtWidgets.QTableWidgetItem(task.acceptedAt)
@@ -192,7 +200,6 @@ class TasksTool(QtWidgets.QMainWindow):
             QtWidgets.QMessageBox.warning(self, "Obaveštenje", "Morate biti autor i zadatak ne sme biti prihvacen", QtWidgets.QMessageBox.Ok)
         self.tasks_table.setSortingEnabled(True)
     
-    # DORADITI u POSEBAN DIJALOG
     def _on_task_details(self):
         """
         Metoda koja otvara novi prozor sa detaljima selektovanog zadatka.
@@ -202,10 +209,8 @@ class TasksTool(QtWidgets.QMainWindow):
         if len(selected_task) == 0:
             return QtWidgets.QMessageBox.warning(self, "Obaveštenje", "Odaberite zadatak", QtWidgets.QMessageBox.Ok)
         task = self.get_task(selected_task)
-
-        dialog = PersonalTasksDialog(self.task_service, self.user_id)
+        dialog = TaskDetailsDialog(task, self.task_service)
         dialog.exec_()
-        self._populate_table()
 
     def _on_accept_task(self):
         """
@@ -249,20 +254,17 @@ class TasksTool(QtWidgets.QMainWindow):
             QtWidgets.QMessageBox.warning(self, "Obaveštenje", "Labela nije kreirana", QtWidgets.QMessageBox.Ok)            
         self.tasks_table.setSortingEnabled(True)
 
-    # DORADITI u POSEBAN DIJALOG
     def _on_edit_label(self):
         """
         Metoda koja menja boju za odabranu labelu.
         """
         self.tasks_table.setSortingEnabled(False)
-        dialog = AddLabelDialog(self.label_service, self.user_id)
+        dialog = EditLabelDialog(self.label_service, self.user_id)
         odgovor = dialog.exec_()
         if odgovor != 0:
-            provera = self.task_service.edit(dialog.label, self.user_id, dialog.new_color)
-            if provera:
-                self._populate_table()
-                self.label_service.edit_label(dialog.label, dialog.new_color, self.user_id)
-                QtWidgets.QMessageBox.information(self, "Obaveštenje", "Boja Labele uspesno promenjena", QtWidgets.QMessageBox.Ok)
+            self.label_service.edit_label(dialog.new_label, self.user_id)
+            self._populate_table()
+            QtWidgets.QMessageBox.information(self, "Obaveštenje", "Boja Labele uspesno promenjena", QtWidgets.QMessageBox.Ok)
         self.tasks_table.setSortingEnabled(True)     
         
     def _on_delete_label(self):
@@ -273,8 +275,10 @@ class TasksTool(QtWidgets.QMainWindow):
         dialog = DeleteLabelDialog(self.label_service, self.user_id)
         odgovor = dialog.exec_()
         if odgovor != 0:
-            self._populate_table()
             self.label_service.delete_label(dialog.new_label, self.user_id)
+            self.task_service.clearList() # redefinisemo novu listu kako bi izvukli zadatke sa praznim label_id
+            self.task_service.load_tasks()
+            self._populate_table()
             QtWidgets.QMessageBox.information(self, "Obaveštenje", "Labela uspesno obrisana", QtWidgets.QMessageBox.Ok)
         self.tasks_table.setSortingEnabled(True)  
 
@@ -289,8 +293,11 @@ class TasksTool(QtWidgets.QMainWindow):
         c = conn.cursor()
 
         label_id = 0
-        for lid, in c.execute('SELECT label_id FROM labels WHERE name = ? and color = ?', (task[3].text(), task[4].text())):
-            label_id = int(lid)
+        if task[3].text() == "" and task[4].text() == "":
+            label_id = None
+        else:
+            for lid, in c.execute('SELECT label_id FROM labels WHERE name = ? and color = ?', (task[3].text(), task[4].text())):
+                label_id = int(lid)
         
         author_id = 0
         imePrezime = task[5].text().split(" ")
