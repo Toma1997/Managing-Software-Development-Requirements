@@ -1,5 +1,4 @@
 from plugin_framework.plugin_service import PluginService
-
 import sys
 from PySide2 import QtWidgets, QtGui
 from gui.main_window import MainWindow
