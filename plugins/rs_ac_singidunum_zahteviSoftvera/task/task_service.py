@@ -173,9 +173,31 @@ class TaskService:
         """
         conn = sqlite3.connect('plugins\\rs_ac_singidunum_zahteviSoftvera\\baza\\zahteviSoftvera.db')
         c = conn.cursor()
+        
+        sviDetalji = list()
+        
+        # detalji zadatka
+        for task_id, name, description, label_id, author_id, createdAt, acceptedAt, userAccepted_id, status in c.execute("SELECT * FROM tasks WHERE name = ? AND description = ?", (task.name, task.description)):
+            detaljiZadatka = [name, description, label_id, author_id, createdAt, acceptedAt, userAccepted_id, status]
 
-        for task_id, name, description, label_id, author_id, createdAt, acceptedAt, userAccepted_id, status in c.execute("SELECT * FROM tasks WHERE task_id = 1"):
-            listaDetalja = [str(task_id), name, description, str(label_id), str(author_id), createdAt, acceptedAt, str(userAccepted_id), status]
+        # detalji autora zadatka
+        for first_name, last_name, email, position in c.execute("SELECT first_name, last_name, email, position FROM users WHERE user_id = ?", (detaljiZadatka[3],)):
+            detaljiAutoraZadatka = [first_name + " " + last_name, email, position]
+
+        # detalji prihvataca zadatka
+        for first_name, last_name, email, position in c.execute("SELECT first_name, last_name, email, position FROM users WHERE user_id = ?", (detaljiZadatka[6],)):
+            detaljiPrihvatacaZadatka = [first_name + " " + last_name, email, position]
+
+        #detalji za labelu
+        for name, color, author_id in c.execute("SELECT name, color, author_id FROM labels WHERE label_id = ?", (detaljiZadatka[2],)):
+            detaljiLabele = [name, color, author_id]
+
+        # detalji autora labele
+        for first_name, last_name, email, position in c.execute("SELECT first_name, last_name, email, position FROM users WHERE user_id = ?", (detaljiLabele[2],)):
+            detaljiAutoraLabele = [first_name + " " + last_name, email, position]
+
         conn.close()
 
-        return listaDetalja
+        # svi detalji za ispis
+        sviDetalji = detaljiZadatka[:2] + detaljiLabele[:2] + detaljiAutoraLabele + detaljiAutoraZadatka + detaljiZadatka[4:6] + detaljiPrihvatacaZadatka + detaljiZadatka[7:]
+        return sviDetalji

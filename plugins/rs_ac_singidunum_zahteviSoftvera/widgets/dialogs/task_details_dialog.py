@@ -15,8 +15,6 @@ class TaskDetailsDialog(QtWidgets.QDialog):
         :type task: Task
         :param task_service: servis za manipulisanje zadacima
         :type task_service: TaskService
-        :param user_id: id korisnika ciji su prihvaceni zadaci
-        :type user_id: int
         :param parent: roditeljski widget dijaloga.
         :type parent: QWidget
         """
@@ -24,7 +22,7 @@ class TaskDetailsDialog(QtWidgets.QDialog):
         super().__init__(parent)
         self.setWindowTitle("Detalji odabranog zadatka")
         # prosiriv ekran velicina
-        self.resize(1200, 700)
+        self.resize(1200, 540)
         # postavljanje ikonice prozora
         self.setWindowIcon(QtGui.QIcon("resources/icons/application-detail.png")) 
 
@@ -39,7 +37,6 @@ class TaskDetailsDialog(QtWidgets.QDialog):
         self.tasks_table.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.tasks_table.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         self.tasks_table.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
-        #self.tasks_table.setGridStyle(QtCore.Qt.SolidLine)
 
         self._populate_table()
 
@@ -54,7 +51,9 @@ class TaskDetailsDialog(QtWidgets.QDialog):
         self.tasks_table.clear()
         self.tasks_table.setColumnCount(1)
         self.tasks_table.setVerticalHeaderLabels(
-               ["Broj", "Naziv zadatka", "Ceo opis", "Labela", "Autor zadatka", "Datum kreiranja", "Datum prihvatanja", "Prihvatio korisnik", "Status"])
+               ["Naziv zadatka", "Ceo opis", "Naziv labele", "Boja labele", "Autor labele", "Email autora labele", "Pozicija autora labele",
+                "Autor zadatka", "Email autora zadatka", "Pozicija autora zadatka", "Datum kreiranja", "Datum prihvatanja",
+                 "Prihvatio korisnik", "Email prihvataca zadatka", "Pozicija prihvataca zadatka" "Status"])
         self.tasks_table.setColumnWidth(0, 1160)
         
         self.tasks_table.setRowCount(len(self.task_details))
